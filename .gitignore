@@ -1,0 +1,30 @@
+# Build
+/target
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Models
+*.onnx
+*.safetensors
+/models
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

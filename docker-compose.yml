@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  scam-detector:
+    build: .
+    container_name: discord-scam-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - RUST_LOG=info
+    # Ограничения ресурсов (опционально)
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M

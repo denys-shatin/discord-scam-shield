@@ -1,0 +1,108 @@
+use anyhow::Result;
+
+pub struct ScamDetector {
+    patterns: Vec<ScamPattern>,
+}
+
+struct ScamPattern {
+    keywords: Vec<&'static str>,
+}
+
+impl ScamDetector {
+    pub async fn new() -> Result<Self> {
+        Ok(Self {
+            patterns: vec![
+                ScamPattern {
+                    keywords: vec![
+                        "airdrop", "free", "claim", "giveaway", "prize", "winner",
+                        "congratulations", "verify", "wallet", "metamask", "trust wallet",
+                        "connect wallet", "seed phrase", "private key", "recovery phrase",
+                        "urgent", "limited time", "act now", "click here", "link in bio",
+                        "$", "usd", "usdt", "eth", "btc", "crypto", "token", "nft",
+                        "investment", "profit", "guaranteed", "double", "triple",
+                        "раздача", "бесплатно", "получи", "выиграл", "приз",
+                        "кошелек", "крипта", "биткоин", "эфир", "токен", "нфт",
+                        "инвестиция", "прибыль", "гарантия", "удвоить", "заработок",
+                    ],
+                },
+            ],
+        })
+    }
+
+    pub async fn is_scam(&self, text: &str) -> Result<bool> {
+        let text_lower = text.to_lowercase();
+        
+        println!("🔍 Анализирую: {}", text_lower);
+        
+        let mut score = 0;
+        let mut has_crypto = false;
+        let mut has_money = false;
+
+        // Проверка ключевых слов
+        for pattern in &self.patterns {
+            let mut keyword_matches = 0;
+            
+            for keyword in &pattern.keywords {
+                if text_lower.contains(keyword) {
+                    keyword_matches += 1;
+                    
+                    // Проверка крипто-терминов
+                    if ["crypto", "btc", "eth", "usdt", "wallet", "metamask", "крипта", "биткоин", "кошелек"].contains(keyword) {
+                        has_crypto = true;
+                    }
+                }
+            }
+            
+            score += keyword_matches;
+        }
+
+        // Проверка упоминания денег
+        if self.contains_money_amount(&text_lower, 50.0) {
+            has_money = true;
+            score += 3;
+        }
+
+        // Проверка подозрительных ссылок
+        if text_lower.contains("http") || text_lower.contains("www.") || text_lower.contains(".com") {
+            score += 2;
+        }
+
+        // Проверка призывов к действию
+        if text_lower.contains("click") || text_lower.contains("жми") || text_lower.contains("перейди") {
+            score += 2;
+        }
+
+        // Скам если: много ключевых слов + крипта + деньги
+        let is_scam = score >= 4 && (has_crypto || has_money);
+        
+        println!("📊 Score: {}, Crypto: {}, Money: {}, Scam: {}", score, has_crypto, has_money, is_scam);
+        
+        Ok(is_scam)
+    }
+
+    fn contains_money_amount(&self, text: &str, threshold: f64) -> bool {
+        let patterns = [
+            r"\$\s*\d+", r"\d+\s*\$", r"\d+\s*usd", r"\d+\s*usdt",
+            r"\d+\s*долларов", r"\d+\s*баксов",
+        ];
+        
+        for pattern in patterns {
+            if let Ok(re) = regex::Regex::new(pattern) {
+                if let Some(cap) = re.find(text) {
+                    let num_str: String = cap.as_str()
+                        .chars()
+                        .filter(|c| c.is_numeric())
+                        .collect();
+                    
+                    if let Ok(amount) = num_str.parse::<f64>() {
+                        if amount >= threshold {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        false
+    }
+}
