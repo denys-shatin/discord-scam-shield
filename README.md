@@ -39,7 +39,7 @@ The bot analyzes messages for:
 ### Prerequisites
 
 - Discord Bot Token ([Create one here](https://discord.com/developers/applications))
-- OCR.space API Key ([Get free key](https://ocr.space/ocrapi))
+- OCR.space API Key ([Get free key](https://ocr.space/ocrapi/freekey))
 - Docker (recommended) or Rust 1.75+
 
 ### 1. Clone Repository
