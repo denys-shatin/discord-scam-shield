@@ -3,6 +3,12 @@ FROM rust:1.75-slim as builder
 
 WORKDIR /app
 
+# Устанавливаем зависимости для сборки
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # Копируем манифесты
 COPY Cargo.toml Cargo.lock rust-toolchain.toml ./
 
