@@ -45,8 +45,8 @@ The bot analyzes messages for:
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/discord-scam-detector.git
-cd discord-scam-detector
+git clone https://github.com/denys-shatin/discord-scam-shield.git
+cd discord-scam-shield
 ```
 
 ### 2. Configure Environment
@@ -88,7 +88,7 @@ ssh root@your_vps_ip
 mkdir -p /opt/discord-bot && cd /opt/discord-bot
 
 # Clone project
-git clone https://github.com/yourusername/discord-scam-detector.git .
+git clone https://github.com/denys-shatin/discord-scam-shield.git .
 
 # Configure .env
 nano .env
