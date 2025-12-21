@@ -14,15 +14,29 @@ impl ScamDetector {
             patterns: vec![
                 ScamPattern {
                     keywords: vec![
+                        // Крипто
                         "airdrop", "free", "claim", "giveaway", "prize", "winner",
                         "congratulations", "verify", "wallet", "metamask", "trust wallet",
                         "connect wallet", "seed phrase", "private key", "recovery phrase",
-                        "urgent", "limited time", "act now", "click here", "link in bio",
-                        "$", "usd", "usdt", "eth", "btc", "crypto", "token", "nft",
-                        "investment", "profit", "guaranteed", "double", "triple",
+                        "crypto", "token", "nft", "usdt", "eth", "btc",
+                        
+                        // Деньги и заработок
+                        "$", "usd", "dollar", "money", "cash", "profit", "income",
+                        "making", "earn", "paid", "payment", "investment",
+                        
+                        // Срочность и призывы
+                        "urgent", "limited time", "act now", "click here", "dm me",
+                        "interested", "reply", "check out", "link in bio",
+                        
+                        // Подозрительные фразы
+                        "not a scam", "not spam", "no scam", "legit", "guaranteed",
+                        "system", "method", "course", "step-by-step",
+                        
+                        // Русские
                         "раздача", "бесплатно", "получи", "выиграл", "приз",
                         "кошелек", "крипта", "биткоин", "эфир", "токен", "нфт",
                         "инвестиция", "прибыль", "гарантия", "удвоить", "заработок",
+                        "система", "метод", "курс", "пошагово",
                     ],
                 },
             ],
@@ -47,8 +61,13 @@ impl ScamDetector {
                     keyword_matches += 1;
                     
                     // Проверка крипто-терминов
-                    if ["crypto", "btc", "eth", "usdt", "wallet", "metamask", "крипта", "биткоин", "кошелек"].contains(keyword) {
+                    if ["crypto", "btc", "eth", "usdt", "wallet", "metamask", "крипта", "биткоин", "кошелек", "token", "nft"].contains(keyword) {
                         has_crypto = true;
+                    }
+                    
+                    // Проверка денег
+                    if ["$", "usd", "dollar", "money", "cash", "profit", "income", "making", "earn", "paid"].contains(keyword) {
+                        has_money = true;
                     }
                 }
             }
@@ -72,8 +91,8 @@ impl ScamDetector {
             score += 2;
         }
 
-        // Скам если: много ключевых слов + крипта + деньги
-        let is_scam = score >= 4 && (has_crypto || has_money);
+        // Скам если: много ключевых слов ИЛИ (крипта/деньги + призывы)
+        let is_scam = score >= 5 || (score >= 3 && (has_crypto || has_money));
         
         println!("📊 Score: {}, Crypto: {}, Money: {}, Scam: {}", score, has_crypto, has_money, is_scam);
         

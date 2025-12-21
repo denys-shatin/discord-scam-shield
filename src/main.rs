@@ -16,7 +16,13 @@ struct Handler {
 #[async_trait]
 impl EventHandler for Handler {
     async fn message(&self, ctx: Context, msg: Message) {
+        // Игнорируем ботов
         if msg.author.bot {
+            return;
+        }
+
+        // Игнорируем ЛС (только серверные сообщения)
+        if msg.guild_id.is_none() {
             return;
         }
 
