@@ -15,28 +15,28 @@ impl ScamDetector {
                 ScamPattern {
                     keywords: vec![
                         // Крипто
-                        "airdrop", "free", "claim", "giveaway", "prize", "winner",
+                        "airdrop", "free crypto", "claim", "giveaway", "prize", "winner",
                         "congratulations", "verify", "wallet", "metamask", "trust wallet",
                         "connect wallet", "seed phrase", "private key", "recovery phrase",
                         "crypto", "token", "nft", "usdt", "eth", "btc",
                         
                         // Деньги и заработок
                         "$", "usd", "dollar", "money", "cash", "profit", "income",
-                        "making", "earn", "paid", "payment", "investment",
+                        "paid", "payment", "investment",
                         
                         // Срочность и призывы
                         "urgent", "limited time", "act now", "click here", "dm me",
-                        "interested", "reply", "check out", "link in bio",
+                        "interested", "reply with", "check out", "link in bio",
                         
                         // Подозрительные фразы
                         "not a scam", "not spam", "no scam", "legit", "guaranteed",
-                        "system", "method", "course", "step-by-step",
+                        "course", "step-by-step", "insanely well",
                         
                         // Русские
                         "раздача", "бесплатно", "получи", "выиграл", "приз",
                         "кошелек", "крипта", "биткоин", "эфир", "токен", "нфт",
                         "инвестиция", "прибыль", "гарантия", "удвоить", "заработок",
-                        "система", "метод", "курс", "пошагово",
+                        "курс", "пошагово",
                     ],
                 },
             ],
